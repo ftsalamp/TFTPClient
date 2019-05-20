@@ -1,5 +1,3 @@
-package com.company;
-
 public class Utils {
 
     public static byte[] toPrimitive(Byte[] toArray) {

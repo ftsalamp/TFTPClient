@@ -1,5 +1,3 @@
-package com.company;
-
 public class ErrorCodes {
 
     enum ErrorCode {

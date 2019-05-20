@@ -1,7 +1,3 @@
-package com.company;
-
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +10,7 @@ public class RequestPacket {
     private final int OPCODELENGTH = 2;
     private final int PADDINGLENGTH = 2;
 
-    public RequestPacket(final byte opcode, @NotNull final String file, @NotNull final String mode) {
+    public RequestPacket(final byte opcode, final String file, final String mode) {
         this.opcode = opcode;
         this.file = file.toCharArray();
         this.mode = mode.toCharArray();

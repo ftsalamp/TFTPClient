@@ -1,7 +1,3 @@
-package com.company;
-
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +12,7 @@ public class ErrorPacket {
     private final int ERRORCODELENGTH = 2;
     private final int PADDINGLENGTH = 1;
 
-    public ErrorPacket(final byte errorcode, @NotNull final String errorMessage) {
+    public ErrorPacket(final byte errorcode, final String errorMessage) {
 
         packetLength = OPCODELENGTH + ERRORCODELENGTH + errorMessage.length() + PADDINGLENGTH;
         this.errorMessage = errorMessage.toCharArray();

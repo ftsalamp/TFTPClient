@@ -1,5 +1,3 @@
-package com.company;
-
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
@@ -52,23 +50,28 @@ public class TFTPClient {
     }
 
     public static void main(String[] args) throws IOException {
-        String serverIp = "83.212.100.61";
-        byte opCode = 1;
-        fileName = "test.txt";
-        switch (Objects.requireNonNull(TFTPOpCodes.getOPMode(opCode))) {
-            case READREQUEST:
-                initiateConnection(serverIp, opCode, fileName);
-                getReceiveResponse();
-                writeFile();
-                break;
-            case WRITEREQUEST:
-            case ACKNOWLEDGMENT:
-            case DATA:
-                System.out.println("Not implemented yet.");
-                break;
-            case ERROR:
-            default:
-                System.err.println("An error has occurred. Closing connection..");
+        if (args.length == 3){
+            String serverIp = args[0];
+            fileName = args[1];
+            byte opCode = (byte)Integer.parseInt(args[2]);
+            switch (Objects.requireNonNull(TFTPOpCodes.getOPMode(opCode))) {
+                case READREQUEST:
+                    initiateConnection(serverIp, opCode, fileName);
+                    getReceiveResponse();
+                    writeFile();
+                    break;
+                case WRITEREQUEST:
+                case ACKNOWLEDGMENT:
+                case DATA:
+                    System.out.println("Not implemented yet.");
+                    break;
+                case ERROR:
+                default:
+                    System.err.println("An error has occurred. Closing connection..");
+            }
+        } else {
+            System.err.println("Invalid number of arguments! Please type first the IP of the TFTP server, second the " +
+                    "filename and last the mode (1 for read or 2 for write).");
         }
     }
 
