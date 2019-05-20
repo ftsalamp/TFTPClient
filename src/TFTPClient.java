@@ -48,15 +48,19 @@ public class TFTPClient {
         }
     }
 
-    private static void getReceiveResponse(){
+    private static void getReceiveResponse(boolean isEnd){
         byte[] receivedPacketBytes = new byte[MAXDATAPACKETSIZE];
         DatagramPacket receivedPacket =
                 new DatagramPacket(receivedPacketBytes, MAXDATAPACKETSIZE, ip, socket.getLocalPort());
         try {
             socket.receive(receivedPacket);
         } catch (IOException e) {
-            System.err.println("Failed to receive TFTP Packet. " + e.getMessage());
-            System.exit(1);
+            if (isEnd) {
+                return;
+            } else {
+                System.err.println("Failed to receive TFTP Packet. " + e.getMessage());
+                System.exit(1);
+            }
         }
         tid = receivedPacket.getPort();
         byte opCode = receivedPacketBytes[1];
@@ -95,7 +99,7 @@ public class TFTPClient {
                 case READREQUEST:
                     System.out.println("Requesting file: " + fileName + " ....");
                     initiateConnection(serverIp, opCode, fileName);
-                    getReceiveResponse();
+                    getReceiveResponse(false);
                     writeFile();
                     break;
                 case WRITEREQUEST:
@@ -130,9 +134,7 @@ public class TFTPClient {
                 retryCount--;
                 System.out.println("Got again block #" + block);
                 sendAck(block);
-                if (!responsePacket.isLast()) {
-                    getReceiveResponse();
-                }
+//                getReceiveResponse(responsePacket.isLast());
             } else {
                 if (responsePacket.getBlock() == block + 1) {
                     retryCount = 4;
@@ -141,10 +143,9 @@ public class TFTPClient {
                     System.out.println("1st Got block #" + block);
                 }
                 sendAck(responsePacket.getBlock());
-                if (!responsePacket.isLast()) {
-                    getReceiveResponse();
-                }
+//                getReceiveResponse(responsePacket.isLast());
             }
+            getReceiveResponse(responsePacket.isLast());
         } else {
             System.err.println("Reached maximum retries..");
             System.exit(1);
