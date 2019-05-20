@@ -1,3 +1,5 @@
+import java.util.List;
+
 public class Utils {
 
     public static byte[] toPrimitive(Byte[] toArray) {
@@ -6,5 +8,11 @@ public class Utils {
             bytes[i] = toArray[i];
         }
         return bytes;
+    }
+
+    static String toString(List str){
+        return str.toString()
+                .substring(1, 3 * str.size() - 1)
+                .replaceAll(", ", "");
     }
 }

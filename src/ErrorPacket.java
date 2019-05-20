@@ -1,23 +1,27 @@
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ErrorPacket {
 
-    private byte errorcode;
-    private char[] errorMessage;
+    private int errorcode;
+    private List<Character> errorMessage = new ArrayList<Character>();
     private int packetLength;
 
     private final byte OPCODE = 5;
-    private final int OPCODELENGTH = 2;
-    private final int ERRORCODELENGTH = 2;
-    private final int PADDINGLENGTH = 1;
 
-    public ErrorPacket(final byte errorcode, final String errorMessage) {
+    ErrorPacket(final byte[] data, int packetLength) {
+        this.errorcode = new Byte(data[1]).intValue();
+        this.packetLength = packetLength;
 
-        packetLength = OPCODELENGTH + ERRORCODELENGTH + errorMessage.length() + PADDINGLENGTH;
-        this.errorMessage = errorMessage.toCharArray();
-        this.errorcode = errorcode;
+        for (int i = 4; i < packetLength - 1; i++){
+            this.errorMessage.add((char) data[i]);
+        }
 
+    }
+
+    String getErrorMessage() {
+        return Utils.toString(errorMessage);
     }
 
     public byte[] getPacket() {
@@ -28,7 +32,7 @@ public class ErrorPacket {
         packet.add(OPCODE);
 
         packet.add((byte) 0);
-        packet.add(errorcode);
+        packet.add((byte) errorcode);
 
         for (char character : errorMessage) {
             packet.add((byte) character);

@@ -16,6 +16,12 @@ class AckPacket {
 
     }
 
+    public int getBlock() {
+        byte[] arr = { block[0], block[1] };
+        ByteBuffer wrapped = ByteBuffer.wrap(arr); // big-endian by default
+        return wrapped.getInt();
+    }
+
     byte[] getPacket() {
 
         List<Byte> packet = new ArrayList<Byte>();
