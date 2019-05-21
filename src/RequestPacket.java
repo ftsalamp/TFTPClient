@@ -5,16 +5,11 @@ public class RequestPacket {
 
     private byte opcode;
     private char[] file, mode;
-    private int packetLength;
-
-    private final int OPCODELENGTH = 2;
-    private final int PADDINGLENGTH = 2;
 
     public RequestPacket(final byte opcode, final String file, final String mode) {
         this.opcode = opcode;
         this.file = file.toCharArray();
         this.mode = mode.toCharArray();
-        packetLength = OPCODELENGTH + this.file.length + mode.length() + PADDINGLENGTH;
 
     }
 
