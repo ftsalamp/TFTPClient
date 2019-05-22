@@ -10,7 +10,6 @@ public class RequestPacket {
         this.opcode = opcode;
         this.file = file.toCharArray();
         this.mode = mode.toCharArray();
-
     }
 
     public byte[] getPacket() {

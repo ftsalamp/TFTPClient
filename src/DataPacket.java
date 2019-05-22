@@ -11,26 +11,19 @@ public class DataPacket {
     DataPacket(final byte[] data, short length) {
         this.packetLength = length;
 
+        ByteBuffer tempBlockNumBuff = ByteBuffer.wrap(new byte[]{data[2], data[3]});
+        this.block = tempBlockNumBuff.getShort();
+
         for (int i = 4; i < packetLength; i++){
             this.data.add(data[i]);
         }
 
-        ByteBuffer tempBlockNumBuff = ByteBuffer.wrap(new byte[]{data[2], data[3]});
-        this.block = tempBlockNumBuff.getShort();
 
-    }
-
-    public int getPacketLength() {
-        return packetLength;
     }
 
     short getBlock() {
         return block;
     }
-
-//    byte[] getPacketData() {
-//        return Utils.toPrimitive(data.toArray(new Byte[0]));
-//    }
 
     List<Byte> getPacketData() {
         return data;
