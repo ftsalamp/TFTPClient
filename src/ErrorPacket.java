@@ -11,7 +11,7 @@ public class ErrorPacket {
     private final byte OPCODE = 5;
 
     ErrorPacket(final byte[] data, int packetLength) {
-        this.errorcode = new Byte(data[1]).intValue();
+        this.errorcode = Byte.valueOf(data[1]).intValue();
         this.packetLength = packetLength;
 
         for (int i = 4; i < packetLength - 1; i++){
