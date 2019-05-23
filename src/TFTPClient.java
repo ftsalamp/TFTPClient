@@ -70,14 +70,14 @@ public class TFTPClient {
                 DataPacket pck = new DataPacket(receivedPacketBytes, (short) receivedPacket.getLength());
                 getDataFromPacket(pck);
                 break;
-            case READREQUEST:
-            case WRITEREQUEST:
-            case ACKNOWLEDGMENT:
             case ERROR:
                 ErrorPacket errorPck = new ErrorPacket(receivedPacketBytes, receivedPacket.getLength());
                 System.err.println("Server returned the following error: " + errorPck.getErrorMessage());
                 System.err.println("Exiting..");
                 System.exit(1);
+            case READREQUEST:
+            case WRITEREQUEST:
+            case ACKNOWLEDGMENT:
             default:
                 System.err.println("An error has occurred. Exiting..");
                 System.exit(1);
@@ -130,18 +130,16 @@ public class TFTPClient {
     private static void getDataFromPacket(DataPacket responsePacket) {
 
         if (retryCount > 0) {
-            if (responsePacket.getBlock() < block + 1) {
+            if (responsePacket.getBlock() != block + 1) {
                 retryCount--;
                 System.out.println("Got again block #" + block);
                 sendAck(block);
 //                getReceiveResponse(responsePacket.isLast());
             } else {
-                if (responsePacket.getBlock() == block + 1) {
-                    retryCount = 4;
-                    data.addAll(responsePacket.getPacketData());
-                    block = (short) (block + 1);
-                    System.out.println("1st Got block #" + block);
-                }
+                retryCount = 4;
+                data.addAll(responsePacket.getPacketData());
+                block = (short) (block + 1);
+                System.out.println("1st time got block #" + block);
                 sendAck(responsePacket.getBlock());
 //                getReceiveResponse(responsePacket.isLast());
             }
